@@ -56,7 +56,7 @@ def run():
     stamina = 100
 
     pygame.mouse.set_visible(False)
-    pygame.event.set_grab(True)  # Locks mouse to window
+    pygame.event.set_grab(True)
 
     running = True
     while running:
@@ -66,12 +66,10 @@ def run():
                 running = False
 
         mouse_dx, _ = pygame.mouse.get_rel()
-        player_angle += mouse_dx * 0.003  # adjust sensitivity
+        player_angle += mouse_dx * 0.003
 
-        # Movement with collision
         keys = pygame.key.get_pressed()
 
-        # Calculate proposed new positions
         dx, dy = 0, 0
         if keys[pygame.K_w]:
             dx += player_speed * math.cos(player_angle)
@@ -85,25 +83,21 @@ def run():
         if keys[pygame.K_d]:  # strafe right
             dx += player_speed * math.cos(player_angle + math.pi / 2)
             dy += player_speed * math.sin(player_angle + math.pi / 2)
-        # Define stamina max outside the loop for clarity
+            
         MAX_STAMINA = 100
 
-        # Inside the run loop before movement logic:
-        # Clamp stamina between 0 and MAX_STAMINA
         if stamina > MAX_STAMINA:
             stamina = MAX_STAMINA
         if stamina < 0:
             stamina = 0
-
-        # Running logic: run only if shift is held and stamina > 0
+            
         if keys[pygame.K_LSHIFT] and stamina > 0:
             player_speed = 10 if player_speed < 1 else 2
-            stamina -= 1  # decrease stamina gradually when running
+            stamina -= 1
         else:
             player_speed = 2
-            stamina += 0.5  # regenerate stamina gradually when not running
-
-        # Check collisions separately for X and Y to avoid getting stuck on corners
+            stamina += 0.5
+            
         new_x = player_x + dx
         new_y = player_y
 
